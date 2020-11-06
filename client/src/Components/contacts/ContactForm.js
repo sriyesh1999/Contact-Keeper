@@ -87,6 +87,7 @@ const ContactForm = () =>
         name='email'
         value={email}
         onChange={onChange}
+        required
       />
       <input
         type='text'

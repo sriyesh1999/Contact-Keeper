@@ -1,6 +1,23 @@
-import React,{useState} from 'react'
+import React,{useState,useContext,useEffect} from 'react'
+import AlertContext from '../../Context/Alert/alertContext'
+import AuthContext from '../../Context/Auth/authContext'
 import {Link} from 'react-router-dom'
-const Login = () => {
+const Login = (props) => {
+    const alertContext =useContext(AlertContext)
+    const auth=useContext(AuthContext)
+    const {login,error,clearErrors,isAuthenticated} =auth
+    const {SetAlert}=alertContext
+    useEffect(()=>{
+        if(isAuthenticated){
+            props.history.push('/')
+        }
+        if(error==='Invalid Credentials'){
+            SetAlert(error,'danger')
+            clearErrors()
+        }
+        //eslint-disable-next-line
+    },[error,isAuthenticated,props.history])
+
     const [user,setUser]=useState({
        
         email:'',
@@ -13,7 +30,14 @@ const Login = () => {
     }
     const onSubmit=e=>{
         e.preventDefault()
-        console.log('login submit')
+        if(email===""||password===""){
+            SetAlert('Please fill all fields','danger')
+        }
+        else{
+            login({
+                email,password
+            })
+        }
     }
     return (
         <div className="form-container">
@@ -28,7 +52,7 @@ const Login = () => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input type="password" name='password' value={password} onChange={onChange} />
+                    <input type="password" name='password' autocomplete="current-password" value={password} onChange={onChange} />
                 </div>
                 
                 <input type="submit" value="login" class="btn btn-dark btn-block"/>

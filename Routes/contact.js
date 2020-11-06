@@ -55,7 +55,7 @@ router.post('/',[auth,[
 //@access Private
 router.put('/:id',auth,async (req,res)=>{
     const {name, email, phone, type} = req.body;
-
+   
     // Build contact object
     const contactFields = {};
     if (name) contactFields.name = name;
